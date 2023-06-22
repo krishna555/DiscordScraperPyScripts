@@ -55,7 +55,7 @@ class ChatExporter:
 
 	def get_next_page(self, id_val):
 
-		url = f"{self.base_url}?before={id_val}&limit=50"
+		url = f"{self.base_url}?before={id_val}&limit=100"
 		response = self.call_discord(url)
 
 		if not response:
