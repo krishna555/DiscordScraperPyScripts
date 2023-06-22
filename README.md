@@ -6,18 +6,20 @@ There are two techniques proposed in this package. You are free to choose either
 1. DiscordChatExporter
 2. Discord GET Request Endpoints
 
-# Comparison between Techniques
+## Comparison between Techniques
 
-# How to run DiscordChatExporter Scripts
+(To Be Done) Use DiscordChatExporter Scripts in general. Responses from Discord GET Request Endpoints are prone to being stalled by the Discord Servers.
+
+## How to run DiscordChatExporter Scripts
 
 1. Setup [DiscordChatExporter](https://github.com/Tyrrrz/DiscordChatExporter) CLI on your machine.
 2. We will essentially try to get the entire chat history for a channel. Then, we will use python scripts to filter out messages relevant to keywords of interest.
 3. To get the entire chat history of a channel use the following command of DiscordChatExporter.
 
 `dotnet <INSTALLATION_PATH>/DiscordChatExporter.Cli.dll export -c <CHANNEL_ID> -o <OUTPUT_PATH> -f Json -t <DISCORD_USER_TOKEN>`
-Here, <CHANNEL_ID> is the Discord Channel Id in a URL of the form `https://discord.com/channels/<SERVER_ID>/<CHANNEL_ID>`.
-<DISCORD_USER_TOKEN> is the token associated with your Discord account. To retrieve this token you may follow the steps mentioned in the [DiscordChatExporter Docs](https://github.com/Tyrrrz/DiscordChatExporter/blob/master/.docs/Token-and-IDs.md#in-chrome).
-<OUTPUT_PATH> is the path where the chat history of the Discord Channel will be logged to.
+  1. Here, <CHANNEL_ID> is the Discord Channel Id in a URL of the form `https://discord.com/channels/<SERVER_ID>/<CHANNEL_ID>`.
+  2. <DISCORD_USER_TOKEN> is the token associated with your Discord account. To retrieve this token you may follow the steps mentioned in the [DiscordChatExporter Docs](https://github.com/Tyrrrz/DiscordChatExporter/blob/master/.docs/Token-and-IDs.md#in-chrome).
+  3. <OUTPUT_PATH> is the path where the chat history of the Discord Channel will be logged to.
 **Note**: [Automating user accounts violates Discord's terms of service](https://support.discord.com/hc/en-us/articles/115002192352-Automated-user-accounts-self-bots-) and may result in account termination. Use at your own risk.
 4. Now, we will create a minified view of every message containing only fields that are relevant to our task. Our script in this package currently generates the following minified metadata from each message representation of DiscordChatExporter.
 
@@ -63,23 +65,23 @@ Here, <CHANNEL_ID> is the Discord Channel Id in a URL of the form `https://disco
 8. The filtered output is in `../outputs/search/{CHANNEL_ID}_{CHANNEL_NAME}.json`
 
 
-# How to run Discord GET Request Endpoint Scripts.
+## How to run Discord GET Request Endpoint Scripts.
 
 
-## Crawl Entire Chat History and filter for keywords
+### Crawl Entire Chat History and filter for keywords
 1. Run `python3 ChatHistoryExporter.py <CHANNEL_ID> <DISCORD_USER_TOKEN> <DISCORD_CHANNEL_URL>`.
-Here, <CHANNEL_ID> is the Discord Channel Id in a URL of the form `https://discord.com/channels/<SERVER_ID>/<CHANNEL_ID>`.
-<DISCORD_USER_TOKEN> is the token associated with your Discord account. To retrieve this token you may follow the steps mentioned in the [DiscordChatExporter Docs](https://github.com/Tyrrrz/DiscordChatExporter/blob/master/.docs/Token-and-IDs.md#in-chrome).
-<DISCORD_CHANNEL_URL> is the URL of the Discord Channel URL of the form `https://discord.com/channels/<SERVER_ID>/<CHANNEL_ID>`.
+   1. Here, <CHANNEL_ID> is the Discord Channel Id in a URL of the form `https://discord.com/channels/<SERVER_ID>/<CHANNEL_ID>`.
+   2. <DISCORD_USER_TOKEN> is the token associated with your Discord account. To retrieve this token you may follow the steps mentioned in the [DiscordChatExporter Docs](https://github.com/Tyrrrz/DiscordChatExporter/blob/master/.docs/Token-and-IDs.md#in-chrome).
+   3. <DISCORD_CHANNEL_URL> is the URL of the Discord Channel URL of the form `https://discord.com/channels/<SERVER_ID>/<CHANNEL_ID>`.
 2. The above command will extract all messages scraping 100 messages at a time, taking a 5s sleep and repeating the same until it retrieves all messages.
 **Note:** Sometimes, Discord GET endpoint does not return messages for a request. Currently, the upper bound for time limit has been set to 1 day in which case, we may not be able to retrieve any more messages from the point of failure. This is because this technique relies on picking the 100th oldest message as an offset id to retrieve the next 100 older messages. So, it is synchronous in nature and can fail if the Discord GET endpoint fails.
 
-## Use Discord's search feature for keyword.
+### Use Discord's search feature for keyword.
 1. This implementation has an important limitation. It can only return 5025 messages corresponding to a keyword. Hence, this may be the least interesting technique. But this is the exact behaviour of how Discord works when you navigate to Discord and search a keyword in the search box. Although, you may see a larger number of messages in Discord when you try to navigate to the >= 5026th message, it will fail on the UI as well.
 2. Run `python3 KeywordMetadataExtractor.py <AUTH_TOKEN> <CHANNEL_URL> <OUTPUT_PATH>`  
 
-Here, <AUTH_TOKEN> is the token associated with your Discord account. To retrieve this token you may follow the steps mentioned in the [DiscordChatExporter Docs](https://github.com/Tyrrrz/DiscordChatExporter/blob/master/.docs/Token-and-IDs.md#in-chrome).
-<CHANNEL_URL> is the URL of the Discord Channel URL of the form `https://discord.com/channels/<SERVER_ID>/<CHANNEL_ID>`.
-<OUTPUT_PATH> is the output path where the generated JSON will be stored.
-	
+   1. Here, <AUTH_TOKEN> is the token associated with your Discord account. To retrieve this token you may follow the steps mentioned in the [DiscordChatExporter Docs](https://github.com/Tyrrrz/DiscordChatExporter/blob/master/.docs/Token-and-IDs.md#in-chrome).
 
+   2. <CHANNEL_URL> is the URL of the Discord Channel URL of the form `https://discord.com/channels/<SERVER_ID>/<CHANNEL_ID>`.
+   3. <OUTPUT_PATH> is the output path where the generated JSON will be stored.
+	
